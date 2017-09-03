@@ -135,7 +135,24 @@ var Switcher = {
         chrome.tabs.create({
             'url':      newTabUrl,
             'index':    Switcher._currentTab.index + 1
+        }, function()   {
+
+            // todo: optionally!
+
+            // call script to preselect page in a tree
+            chrome.tabs.executeScript( null, {
+
+                file: 'preselectPageInTree.js'
+
+            }, function () {
+                // on system pages you can't inject any scripts
+                if ( chrome.runtime.lastError ) {
+                    console.warn('Error injecting script: \n' + chrome.runtime.lastError.message);
+                    console.warn('You\'re probably trying to use this extension on some Chrome\'s system page.');
+                }
+            });
         });
+
     }
 
 };
